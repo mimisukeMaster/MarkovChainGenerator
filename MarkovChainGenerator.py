@@ -21,7 +21,7 @@ def Main():
 
         # 同一なら終了
         if OutputText == InputText:
-            print("Number of attempts: " + (i + 1))
+            print("Number of attempts: " + str(i + 1))
             break
 
 
