@@ -2,18 +2,26 @@ import random
 
 def Main():
     InputText = "ぶぶんぶんすうぶんかい"
-    ListedText = list(InputText)
+    NumOfAttempts = 10000
 
     # 前処理
+    ListedText = list(InputText)
+    
+    # 後継文字を分析
     FollowCounts = FollowCharCount(ListedText)
+
+    # 遷移確率を計算
     FollowProps = FollowCharProps(FollowCounts)
 
-    for i in range(10000):
-        j = 1
+    for i in range(NumOfAttempts):
+
+        # 遷移確率に基づき文字列を生成
         OutputText = GenerateText(ListedText, FollowProps)
         print(OutputText)
+
+        # 同一なら終了
         if OutputText == InputText:
-            print(i + 1)
+            print("Number of attempts: " + (i + 1))
             break
 
 
@@ -43,7 +51,7 @@ def GenerateText(ListedText, FollowProps):
 def FollowCharCount(ListedText):
     """
     次の文字が何かを総当たりで計算しカウント
-    今の文字 * 次の文字 の表に数値を埋めていく感じ
+    今の文字 * 次の文字 の表に代入
     """
     FollowCounts = {}
 
