@@ -1,28 +1,37 @@
 import random
+import MeCab
 
 def Main():
-    InputText = "ぶぶんぶんすうぶんかい"
-    NumOfAttempts = 10000
+    ATTEMPTS = 100
 
-    # 前処理
-    ListedText = list(InputText)
-    
+    with open("InputText.txt", "r",encoding="utf-8") as f:
+        datas = f.readlines()
+
+    # わかち書きをして単語毎にList要素へ
+    tagger = MeCab.Tagger("-Owakati")
+    text = ""
+    for data in datas:
+        lineText = tagger.parse(data).strip()
+        text += lineText
+
+    ListedText = text.split()
+
     # 後継文字を分析
     FollowCounts = FollowCharCount(ListedText)
 
     # 遷移確率を計算
     FollowProps = FollowCharProps(FollowCounts)
 
-    for i in range(NumOfAttempts):
+    for i in range(ATTEMPTS):
 
         # 遷移確率に基づき文字列を生成
         OutputText = GenerateText(ListedText, FollowProps)
         print(OutputText)
 
         # 同一なら終了
-        if OutputText == InputText:
-            print("Number of attempts: " + str(i + 1))
-            break
+        # if OutputText == InputText:
+        #     print("Number of attempts: " + str(i + 1))
+        #     break
 
 
 def GenerateText(ListedText, FollowProps):
@@ -42,7 +51,7 @@ def GenerateText(ListedText, FollowProps):
             currentChar = random.choices(nextChars, props)[0]
             OutputText += currentChar  
         else:
-            # 最初の文字続きがない(InputTextの最後の文字で固有の場合)とき
+            # 最初の文字に続きがない(InputTextの最後の文字で固有の場合)とき
             break
         
     return OutputText
