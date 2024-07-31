@@ -1,11 +1,14 @@
 import random
 import MeCab
+import re
 
 def Main():
     ATTEMPTS = 100
 
+    # 句点ごとに分割してList化
     with open("InputText.txt", "r",encoding="utf-8") as f:
-        datas = f.readlines()
+        datas = re.findall(r'.*?[。.]', f.read())
+    print(datas)
 
     # わかち書きをして単語毎にList要素へ
     tagger = MeCab.Tagger("-Owakati")
@@ -26,7 +29,7 @@ def Main():
 
         # 遷移確率に基づき文字列を生成
         OutputText = GenerateText(ListedText, FollowProps)
-        print(OutputText)
+        # print(OutputText)
 
         # 同一なら終了
         # if OutputText == InputText:
